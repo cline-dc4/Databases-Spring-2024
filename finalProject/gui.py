@@ -13,10 +13,6 @@ try:
         print(connection)
         cursor = connection.cursor()
 
-        #function for coffeeIngredientButton
-        def coffeeIngredientButton():
-            
-
         #coffee gui
         def coffeeGui():
             coffeeWindow = Tk()
@@ -29,12 +25,29 @@ try:
             cursor.execute('SELECT drink_name FROM dcbcdb.CoffeeDrink;')
             for x in cursor:
                 options.append(x[0])
-            default = StringVar(master=coffeeWindow)
-            default.set(options[0])
+            #set default value for dropdown
+            dropdownSelected = StringVar(master=coffeeWindow)
+            dropdownSelected.set(options[0])
             #dropdown menu for drink names
-            coffeeDropdown = OptionMenu(coffeeWindow, default, *options)
+            coffeeDropdown = OptionMenu(coffeeWindow, dropdownSelected, *options)
             coffeeDropdown.place(x=50, y=50)
-            coffeeButton
+
+            #function for coffeeIngredientButton
+            def coffeeIngredientButton():
+                #query ingredients
+                queryString = 'SELECT ci.ingredient_name \
+                FROM dcbcdb.CoffeeDrink AS cd JOIN dcbcdb.IngredientList AS il JOIN dcbcdb.CoffeeIngredient AS ci \
+                WHERE cd.drink_name = "' + dropdownSelected.get() + '" AND cd.drink_id = il.drink_id AND il.ingredient_id = ci.ingredient_id;'
+                cursor.execute(queryString)
+                #organize ingredients to be displayed
+                messageString = ""
+                for x in cursor:
+                    messageString = messageString + x[0] + '\n'
+                #show ingredients
+                messagebox.showinfo(title = 'Coffee Ingredients', message = messageString)
+            #ingredient button
+            ingredientButton = Button(coffeeWindow, text = 'List Ingredients', command = lambda: coffeeIngredientButton())
+            ingredientButton.place(x=200, y=50)
 
             coffeeWindow.mainloop()
 
@@ -42,7 +55,7 @@ try:
         testWindow = Tk()
         testWindow.title('DCBCDB')
         testWindow.geometry('500x300')
-        testButton = Button(testWindow, text = 'Coffee', command = coffeeGui)
+        testButton = Button(testWindow, text = 'Coffee', command = lambda: coffeeGui())
         testButton.place(x = 50, y = 50)
         testWindow.mainloop()
 
