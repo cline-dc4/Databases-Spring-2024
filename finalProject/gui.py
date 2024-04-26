@@ -98,7 +98,7 @@ try:
                 #open a new menu for IngredientList additions (use dropdown menus)
                 def ingredientAdd():
                     addIngredientGui = Tk()
-                    addIngredientGui.geometry('200x200')
+                    addIngredientGui.geometry('350x200')
                     #find the drink_id
                     cursor.execute(DrinkIdSqlQuery)
                     drink_id = 0
@@ -117,7 +117,7 @@ try:
                     coffeeDropdown = OptionMenu(addIngredientGui, dropdownSelected, *options)
                     l = Label(master=addIngredientGui, text='Select an ingredient you would like to\nadd and click the "add" button.\nOnce all ingredients are added, click "done".')
                     l.place(x=50, y=15)
-                    coffeeDropdown.place(x=80, y=75)
+                    coffeeDropdown.place(x=100, y=75)
                     #TODO: include compatability for a dropdown menu of ingredients(when button pressed, add a row with drink_id and ingredient_id for selected ingredient)
 
 
