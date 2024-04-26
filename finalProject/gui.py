@@ -13,6 +13,8 @@ try:
         print(connection)
         cursor = connection.cursor()
 
+#######################################################################################################
+
         #coffee information gui
         def coffeeInfoGui():
             coffeeWindow = Tk()
@@ -51,6 +53,7 @@ try:
 
             coffeeWindow.mainloop()
 
+#######################################################################################################
 
         #coffee drink adding gui
         def coffeeAddGui():
@@ -69,12 +72,13 @@ try:
             #button to run add function
             runInsertButton = Button(coffeeAddWindow, text = 'Add drink', command = lambda: coffeeAdd())
             runInsertButton.place(x=350, y=50)
-            
-            #instance variables for functions
-            name = coffeeNameEntry.get()
-            price = coffeePriceEntry.get()
+
             #function for the coffeeAddButton
             def coffeeAdd():
+                name = coffeeNameEntry.get()
+                print(name)
+                price = coffeePriceEntry.get()
+                print(price)
                 #construct sql query to add a row
                 drinkSqlQuery = "INSERT INTO dcbcdb.CoffeeDrink \
                             VALUES \
@@ -93,14 +97,36 @@ try:
 
                 #open a new menu for IngredientList additions (use dropdown menus)
                 def ingredientAdd():
-
+                    addIngredientGui = Tk()
+                    addIngredientGui.geometry('200x200')
                     #find the drink_id
                     cursor.execute(DrinkIdSqlQuery)
                     drink_id = 0
                     for x in cursor:
                         drink_id = x[0]
 
-                #TODO: include compatability for a dropdown menu of ingredients(when button pressed, add a row with drink_id and ingredient_id for selected ingredient)
+                    #variables for the dropdown menu
+                    options = []
+                    cursor.execute('SELECT ingredient_name FROM dcbcdb.CoffeeIngredient;')
+                    for x in cursor:
+                        options.append(x[0])
+                    #set default value for dropdown
+                    dropdownSelected = StringVar(master=addIngredientGui)
+                    dropdownSelected.set(options[0])
+                    #dropdown menu for drink names
+                    coffeeDropdown = OptionMenu(addIngredientGui, dropdownSelected, *options)
+                    l = Label(master=addIngredientGui, text='Select an ingredient you would like to\nadd and click the "add" button.\nOnce all ingredients are added, click "done".')
+                    l.place(x=50, y=15)
+                    coffeeDropdown.place(x=80, y=75)
+                    #TODO: include compatability for a dropdown menu of ingredients(when button pressed, add a row with drink_id and ingredient_id for selected ingredient)
+
+
+                    addIngredientGui.mainloop()
+                ingredientAdd()
+            coffeeAddWindow.mainloop()
+
+#######################################################################################################
+
 
         #home gui
         mainWindow = Tk()
