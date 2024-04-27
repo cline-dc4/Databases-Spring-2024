@@ -118,6 +118,23 @@ try:
                     l = Label(master=addIngredientGui, text='Select an ingredient you would like to\nadd and click the "add" button.\nOnce all ingredients are added, click "done".')
                     l.place(x=50, y=15)
                     coffeeDropdown.place(x=100, y=75)
+
+                    #buttons
+                    #bool to ensure at least 1 ingredient has been added
+                    addButtonClick = False
+                    doneButton = Button(text = 'done', command = doneButtonFunction())
+                    addButton = Button(text = 'add', command = addButtonFunction())
+                    #function for the done button
+                    def doneButtonFunction():
+                        if not addButtonClick:
+                            messagebox.showerror(title = 'Error', message = 'No ingredients have been added')
+                        else:
+                            addIngredientGui.destroy()
+
+                    #function for the add button
+                    def addButtonFunction():
+                        queryString="INSERT INTO IngredientList VALUES(" + drink_id + ",  " + dropdownSelected.get() + ")"
+                        print(queryString)
                     #TODO: include compatability for a dropdown menu of ingredients(when button pressed, add a row with drink_id and ingredient_id for selected ingredient)
 
 
